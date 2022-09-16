@@ -78,7 +78,7 @@ public class MobilePlanController {
         	
             mpResponse = new ResponseEntity<Object>(response , null, HttpStatus.NOT_FOUND);    
         }
-        HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new Auditlog("GET-BY-ID",mpResponse.toString(),date));
+        HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new Auditlog("GET-BY-ID",mpResponse.getBody().toString(),date));
 		restTemplate.postForObject("http://localhost:8081/audit", request, Auditlog.class);
 		return mpResponse;
     }
