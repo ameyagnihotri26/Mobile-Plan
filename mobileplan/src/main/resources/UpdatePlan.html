@@ -87,7 +87,7 @@
                     <h3><b>Update Your Mobile Plan</b></h3><br>
                     <div>
                         <label class="form-label"><b>Plan ID*</b></label>
-                        <input type="number" id = "updateid" class="form-control mb-3">
+                        <input type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" id = "updateid" class="form-control mb-3">
                     </div>
 
                     <div>
@@ -98,7 +98,7 @@
 
                     <div>
                         <label class="form-label"><b>Plan Validity*</b></label>
-                        <input type="text" id = "updatevalidity" class="form-control mb-3">
+                        <input type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" id = "updatevalidity" class="form-control mb-3">
                     </div>
 
                     <div>

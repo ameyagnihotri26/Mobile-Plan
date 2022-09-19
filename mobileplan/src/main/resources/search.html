@@ -84,7 +84,7 @@
                       </div>
                     <label class="form-label mb-3"><b>Search by ID*</b></label>
                     <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="number" id = "boom"  placeholder="Search">
+                        <input class="form-control me-2" type="number"  onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'"id = "boom"  placeholder="Search">
                         <button type="button" class="btn btn-success" id = "getByID" style="padding: 1px,2px,0px,0px ; " > Search<span class="bi bi-trash red-color"></span></button>
                         
                     </form>

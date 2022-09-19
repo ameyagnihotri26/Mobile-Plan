@@ -86,7 +86,7 @@
 
                     <label class="form-label mb-3"><b>Delete Plan by ID*</b></label>
                     <form class="d-flex" role="search">
-                        <input class="form-control me-2 mb-3" type="number" id = "id" placeholder="Enter ID">
+                        <input class="form-control me-2 mb-3" type="number"  onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'"id = "id" placeholder="Enter ID">
                     </form>
                 </div>
                 <br>
