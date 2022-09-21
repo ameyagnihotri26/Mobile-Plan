@@ -22,11 +22,14 @@ import com.hansen.mobileplan.srvc.MobilePlanSrvc;
 @RequestMapping("/mp")
 public class MobilePlanController {
 	
-	RestTemplate restTemplate = new RestTemplate();
-
-
-
+//	RestTemplate variable.
+	static final RestTemplate restTemplate = new RestTemplate();
 	
+//	URI variable.
+	static final String URI = "http://localhost:8081/audit";
+	
+//	ID not exist variable.
+	static final String ID_NOT_EXIST = "Given ID does not exist";
 	   
 	@Autowired
 	MobilePlanSrvc mpSrvc;
@@ -34,122 +37,130 @@ public class MobilePlanController {
 	@Autowired
 	MobilePlanDao mobilePlanDao;
 	
+//	create - This function is used to create/store a mobileplan.
 	@CrossOrigin
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Object> create(@RequestBody MobilePlan inputentity) {
 		ResponseEntity<Object> mpResponse;
+		
 		Date date = new Date();
-
 
 		Object mobilePlan = mpSrvc.create(inputentity);
 		if (mobilePlan != null) {
-			
-			mpResponse = new ResponseEntity<Object>(inputentity, null, HttpStatus.CREATED);
-			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new Auditlog("POST",inputentity.toString(),date));
-    		restTemplate.postForObject("http://localhost:8081/audit", request, Auditlog.class);
-			return mpResponse;
-			
+			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
+			Auditlog("POST",inputentity.toString(),date));
+    		restTemplate.postForObject(URI, request, Auditlog.class);
+    		
+    		mpResponse = new ResponseEntity<Object>(inputentity, null, HttpStatus.CREATED);
 		} else {
+			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
+			Auditlog("POST","Given ID: " + inputentity.getId()+ " already exist.",date));
+			restTemplate.postForObject(URI, request, Auditlog.class);
+			
 			String response = "Cant save as ID is already exist";
-			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new Auditlog("POST","Given ID: " + inputentity.getId()+ " already exist!",date));
-			restTemplate.postForObject("http://localhost:8081/audit", request, Auditlog.class);
-            mpResponse = new ResponseEntity<Object>(response , null, HttpStatus.BAD_REQUEST);  
-			return mpResponse;
+            mpResponse = new ResponseEntity<Object>(response, null, HttpStatus.BAD_REQUEST);  
 		}
+		
+		return mpResponse;
 	}
 	
+//	read - This function is used to get a mobileplan by its ID.
 	@CrossOrigin
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> read(@PathVariable(value = "id") Long id) {
         ResponseEntity<Object> mpResponse = null;
         
         Date date = new Date();
- 	   
         
-        Object mobilePlan = mpSrvc.read(id);
-        
-        
-        if( mobilePlan != null) {
-            mpResponse = new ResponseEntity<Object>(mobilePlan, null, HttpStatus.OK); 
-            HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new Auditlog("GET-BY-ID",mpResponse.getBody().toString(),date));
-    		restTemplate.postForObject("http://localhost:8081/audit", request, Auditlog.class);
+        Object mobilePlanByID = mpSrvc.read(id);  
+        if( mobilePlanByID != null) {
+            mpResponse = new ResponseEntity<Object>(mobilePlanByID, null, HttpStatus.OK); 
+            
+            HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
+            Auditlog("GET-BY-ID",mpResponse.getBody().toString(),date));
+    		restTemplate.postForObject(URI, request, Auditlog.class);
         }
         else {
-        	String response = "Mobile plan does not exist for given ID";
-        	
-            mpResponse = new ResponseEntity<Object>(response , null, HttpStatus.NOT_FOUND);  
-            HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new Auditlog("GET-BY-ID","Given ID: " + id +" does not exist!",date));
-    		restTemplate.postForObject("http://localhost:8081/audit", request, Auditlog.class);
+            mpResponse = new ResponseEntity<Object>(ID_NOT_EXIST , null, HttpStatus.NOT_FOUND);  
+            
+            HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
+            Auditlog("GET-BY-ID","Given ID: " + id +" does not exist.",date));
+    		restTemplate.postForObject(URI, request, Auditlog.class);
         }
         
 		return mpResponse;
     }
 	
+//	readAll - This function is used to get the list of all mobileplan exists inside database.
 	@CrossOrigin
 	@RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Iterable<MobilePlan>> readAll() {
         ResponseEntity<Iterable<MobilePlan>> mpResponse;
+        
         Date date = new Date();
  	   
-		 HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new
-		 Auditlog("GET","All plans displayed successfully",date));
-		 restTemplate.postForObject("http://localhost:8081/audit", request,
-		 Auditlog.class);
+		HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new
+		Auditlog("GET","All plans displayed successfully.",date));
+		restTemplate.postForObject(URI, request, Auditlog.class);
 		 
         Iterable<MobilePlan> mobilePlanList = mpSrvc.readAll();
         
         mpResponse = new ResponseEntity<Iterable<MobilePlan>>(mobilePlanList, null, HttpStatus.OK);
+        
         return mpResponse;
     }
 	
+//	update - This function is used to update a mobileplan for the respective ID.	
 	@CrossOrigin
 	@RequestMapping(method = RequestMethod.PATCH)
     public ResponseEntity<Object> update(@RequestBody MobilePlan tobemerged) {
         ResponseEntity<Object> planResponse;
+        
         Date date = new Date();
  	   
-
-        
-        Object plan = mpSrvc.update(tobemerged);
-        
-        if(plan != null) {
-        	planResponse = new ResponseEntity<Object>("Data updated Successfully", null, HttpStatus.OK);
-        	HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new Auditlog("PATCH",tobemerged.toString(),date));
-    		restTemplate.postForObject("http://localhost:8081/audit", request, Auditlog.class);
-        	return planResponse;
+        Object updatedMobilePlan = mpSrvc.update(tobemerged);
+        if(updatedMobilePlan != null) {
+        	planResponse = new ResponseEntity<Object>(URI, null, HttpStatus.OK);
+        	
+        	HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
+        	Auditlog("PATCH",tobemerged.toString(),date));
+    		restTemplate.postForObject(URI, request, Auditlog.class);
         }else {
-        	String response = "Given ID does not exist";
+			planResponse =  new ResponseEntity<Object>(ID_NOT_EXIST, null, HttpStatus.BAD_REQUEST);
 			
-			planResponse =  new ResponseEntity<Object>(response, null, HttpStatus.BAD_REQUEST);
-			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new Auditlog("PATCH","Given ID: " + tobemerged.getId()+ " does not exist!",date));
-			restTemplate.postForObject("http://localhost:8081/audit", request, Auditlog.class);
-			return planResponse;
+			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new
+			Auditlog("PATCH","Given ID: " + tobemerged.getId()+ " does not exist.",date));
+			restTemplate.postForObject(URI, request, Auditlog.class);
         }
-     }	
+        
+        return planResponse;
+     }
 	
+//	delete - This function is used to delete a mobileplan for given ID.
 	@CrossOrigin
 	@RequestMapping(value = "{planid}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> delete(@PathVariable(value = "planid") Long planid) {
 		ResponseEntity<Object> planResponse = null;
+		
 		Date date = new Date();
-		   
-		
-        
-		Object delete = mpSrvc.delete(planid);
-		
-		if(delete != null) {
-			String response = "Data deleted successfully";
-			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new Auditlog("DELETE","DELETED Successfully for given ID: " + planid,date));
-			restTemplate.postForObject("http://localhost:8081/audit", request, Auditlog.class);
-			planResponse =  new ResponseEntity<Object>(response, null, HttpStatus.OK);
-			return planResponse;
-		}else {
-			String response = "ID not found";
-			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new Auditlog("DELETE","Given ID: " + planid + " does not exist!",date));
-			restTemplate.postForObject("http://localhost:8081/audit", request, Auditlog.class);
-			planResponse =  new ResponseEntity<Object>(response, null, HttpStatus.NOT_FOUND);
-			return planResponse;
-		}
-	}
 
+		Object deletedMobilePlan = mpSrvc.delete(planid);
+		if(deletedMobilePlan != null) {
+			String response = "Data deleted successfully";
+			
+			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
+			Auditlog("DELETE","DELETED Successfully for given ID: " + planid,date));
+			restTemplate.postForObject(URI, request, Auditlog.class);
+			
+			planResponse =  new ResponseEntity<Object>(response, null, HttpStatus.OK);
+		}else {
+			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new
+			Auditlog("DELETE","Given ID: " + planid + " does not exist.",date));
+			restTemplate.postForObject(URI, request, Auditlog.class);
+			
+			planResponse =  new ResponseEntity<Object>(ID_NOT_EXIST, null, HttpStatus.NOT_FOUND);
+		}
+		
+		return planResponse;
+	}
 }
