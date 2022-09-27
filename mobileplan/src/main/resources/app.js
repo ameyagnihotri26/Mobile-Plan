@@ -47,7 +47,7 @@ const saveUser = async () => {
     } else if (respStatus === 400) {
       let validationRes = document.getElementById("validationID");
 
-      let text = "Not created";
+      let text = "ID already exist";
       validationRes.innerHTML =
         '<div class="alert alert-danger" id ="validationID" role="alert">' +
         text +
