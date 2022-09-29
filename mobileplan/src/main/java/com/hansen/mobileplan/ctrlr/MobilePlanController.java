@@ -48,13 +48,13 @@ public class MobilePlanController {
 		Object mobilePlan = mpSrvc.create(inputentity);
 		if (mobilePlan != null) {
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-			Auditlog("POST",inputentity.toString(),date));
+			Auditlog("CREATE",inputentity.toString(),date));
     		restTemplate.postForObject(URI, request, Auditlog.class);
     		
     		mpResponse = new ResponseEntity<Object>(inputentity, null, HttpStatus.CREATED);
 		} else {
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-			Auditlog("POST","Given ID: " + inputentity.getId()+ " already exist.",date));
+			Auditlog("CREATE","Given ID: " + inputentity.getId()+ " Already Exist.",date));
 			restTemplate.postForObject(URI, request, Auditlog.class);
 			
 			String response = "Cant save as ID is already exist";
@@ -77,14 +77,14 @@ public class MobilePlanController {
             mpResponse = new ResponseEntity<Object>(mobilePlanByID, null, HttpStatus.OK); 
             
             HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-            Auditlog("GET-BY-ID",mpResponse.getBody().toString(),date));
+            Auditlog("GET-BY-ID","Plan ID: " + id + " Displayed.",date));
     		restTemplate.postForObject(URI, request, Auditlog.class);
         }
         else {
             mpResponse = new ResponseEntity<Object>(ID_NOT_EXIST , null, HttpStatus.NOT_FOUND);  
             
             HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-            Auditlog("GET-BY-ID","Given ID: " + id +" does not exist.",date));
+            Auditlog("GET-BY-ID","Given ID: " + id +" Does Not Exist.",date));
     		restTemplate.postForObject(URI, request, Auditlog.class);
         }
         
@@ -100,7 +100,7 @@ public class MobilePlanController {
         Date date = new Date();
  	   
 		HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new
-		Auditlog("GET","All plans displayed successfully.",date));
+		Auditlog("GET","Plans Displayed.",date));
 		restTemplate.postForObject(URI, request, Auditlog.class);
 		 
         Iterable<MobilePlan> mobilePlanList = mpSrvc.readAll();
@@ -123,13 +123,13 @@ public class MobilePlanController {
         	planResponse = new ResponseEntity<Object>(URI, null, HttpStatus.OK);
         	
         	HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-        	Auditlog("PATCH",tobemerged.toString(),date));
+        	Auditlog("UPDATE","Plan ID: " + tobemerged.getId() + " Updated.",date));
     		restTemplate.postForObject(URI, request, Auditlog.class);
         }else {
 			planResponse =  new ResponseEntity<Object>(ID_NOT_EXIST, null, HttpStatus.BAD_REQUEST);
 			
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new
-			Auditlog("PATCH","Given ID: " + tobemerged.getId()+ " does not exist.",date));
+			Auditlog("UPDATE","Given ID: " + tobemerged.getId()+ " Does Not Exist.",date));
 			restTemplate.postForObject(URI, request, Auditlog.class);
         }
         
@@ -149,13 +149,13 @@ public class MobilePlanController {
 			String response = "Data deleted successfully";
 			
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-			Auditlog("DELETE","DELETED Successfully for given ID: " + planid,date));
+			Auditlog("DELETE","Plan ID: " + planid + " Deleted.",date));
 			restTemplate.postForObject(URI, request, Auditlog.class);
 			
 			planResponse =  new ResponseEntity<Object>(response, null, HttpStatus.OK);
 		}else {
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new
-			Auditlog("DELETE","Given ID: " + planid + " does not exist.",date));
+			Auditlog("DELETE","Given ID: " + planid + " Does Not Exist.",date));
 			restTemplate.postForObject(URI, request, Auditlog.class);
 			
 			planResponse =  new ResponseEntity<Object>(ID_NOT_EXIST, null, HttpStatus.NOT_FOUND);
