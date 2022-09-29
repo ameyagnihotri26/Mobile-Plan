@@ -132,21 +132,14 @@ const getUserByID = async () => {
     if (respStatus === 200) {
       let validationRes = document.getElementById("validationID");
       let text = " Plan Found";
-      let hence = "tihs is importtan and the n h";
+      
 
       let res = await response2.json();
-
-      let htmlID = document.getElementById("0");
-      let htmlvalidity = document.getElementById("3");
-      let htmldescription = document.getElementById("2");
-      let htmlname = document.getElementById("1");
+      let helper = document.getElementById("table");
 
       console.log(res);
-
-      htmlID.innerHTML = res["id"];
-      htmlvalidity.innerText = res["validity"];
-      htmldescription.innerText = res["name"];
-      htmlname.innerText = res["description"];
+      helper.innerHTML = '<table class="table"><thead class="thead-dark"><tr><th scope="col">ID</th><th scope="col">Name</th><th scope="col">Description</th><th scope="col">Validity</th></tr></thead><tbody><tr><th scope="row">' + res['id']+'</th><td>' + res['name']+'</td><td>' + res['validity']+'</td><td>' + res['description']+'</td> </tbody></table>'
+      
 
       validationRes.innerHTML =
         '<div class="alert alert-success" id ="validationID" role="alert">' +
