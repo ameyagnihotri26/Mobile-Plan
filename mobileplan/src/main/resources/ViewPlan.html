@@ -14,7 +14,7 @@
     <title>Mobile plan</title>
 </head>
 
-<body background="abc.jpg">
+<body background="abc.jpg" style="background-size: cover;">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="new index.html">MobilePlan</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -31,7 +31,8 @@
                     <a class="nav-link" href="/create.html">Create</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/ViewPlan.html">View Plan</a>
+                    <a class="nav-link"   href="/ViewPlan.html">View Plan</a>
+                   
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/search.html">Search Plan</a>
@@ -71,7 +72,7 @@
             </div> -->
         </div>
     </nav>
-    <div class="row" id="first-row">
+    <div class="row" >
         <div class="col d-flex justify-content-center">
             <div class="col-md-7 p-4">
                 <div class="card shadow p-3 mb-5 bg-body rounded" >
@@ -79,7 +80,7 @@
                         <div class=" row"  >
                         <div class="table-responsive" style="overflow-y: auto; overflow-x: auto; height:300px; width:100%;">
                             <table class="table table-bordered" id="currTable">
-                                <thead class="bg-dark">
+                                <thead class="bg-dark" style = " position:sticky; top:0;">
                                     <tr>
                                         <th scope="col" style=color:white;>ID</th>
                                         <th scope="col" style=color:white;>Validity</th>
@@ -89,6 +90,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        
                                     </tr>
                                 </tbody>
                             </table>
@@ -98,7 +100,7 @@
                         
                     </div>
                     <div class="text-center">
-                        <button type="button" id="view" class="btn btn-outline-success mt-4 btn-lg">
+                        <button type="button" id = "view" class="btn btn-outline-success mt-4 btn-lg">
                             View Plans</button>
                     </div>
                 </div>
@@ -107,6 +109,23 @@
     </div>
     </div>
     <script src="app.js"></script>
+    <script type="text/javascript">
+        function getmobileplanlist1() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://localhost:8080/mp", false);
+            xhr.send();
+            var mpList = xhr.response;
+            //alert(mpList);
+            var mobilePlans = JSON.parse(mpList)
+            var mobilePlanList = document.getElementById("mobileplans");
+            for (var i = 0; i < mobilePlans.length; i++) {
+                mobilePlanList.innerHTML += '<tr>' + '<td class="text-align-center" style="padding:0 17px 0 17px;">' + mobilePlans[i].id +
+                    '</td>' + '<td class="text-align-center" style="padding:0 17px 0 17px;">' + mobilePlans[i].operationType + '</td>' +
+                    '<td class="text-align-center" style="padding:0 17px 0 17px;">' + mobilePlans[i].entityJson + '</td>' +
+                    '<td class="text-align-center" style="padding:0 17px 0 17px;">' + mobilePlans[i].modificationDate + '</tr>';
+            }
+        }
+    </script>
 </body>
 
 </html>
