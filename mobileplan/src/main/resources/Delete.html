@@ -86,14 +86,14 @@
 
                     <label class="form-label mb-3"><b>Delete Plan by ID*</b></label>
                     <form class="d-flex" role="search">
-                        <input class="form-control me-2 mb-3" type="number"  onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'"id = "id" placeholder="Enter ID">
+                        <input name="number" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" id = "id" size="80" maxlength="4">
                     </form>
                 </div>
-                <br>
+                
                 <p id = "validationID"></p>
                 <br>
                 <div class="text-center">
-                    <button type="button" class="btn btn-danger" data-toggle="modal"  data-target ="#deletemodal" >Delete <span class="bi bi-trash red-color"></span></button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal"  data-target ="#deletemodal" text-align: center >Delete <span class="bi bi-trash red-color"></span></button>
                 </div>
                 <div class="modal" id = "deletemodal" aria-labelledby="abc" aria-hidden="true" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">

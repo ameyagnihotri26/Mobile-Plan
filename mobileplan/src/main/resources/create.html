@@ -86,7 +86,7 @@
                     <h3><b>Create a Mobile Plan</b></h3><br>
                     <div>
                         <label class="form-label"><b>Plan ID*</b></label>
-                        <input type="number"  onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'"id = "id" class="form-control mb-3">
+                        <input name="number" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" id="id" class="form-control mb-3 " maxlength="4">
                     </div>
 
 
@@ -98,7 +98,7 @@
 
                     <div>
                         <label class="form-label"><b>Plan Validity*</b></label>
-                        <input type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" id = "validity" class="form-control mb-3">
+                        <input name="number" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" id="validity" class="form-control mb-3"  maxlength="3">
                     </div>
 
                     <div>
