@@ -14,7 +14,7 @@
     <title>Mobile plan</title>
 </head>
 
-<body background="abc.jpg" style="background-size: cover;">
+<body background="abc.jpg" style="background-size: cover;" onLoad="getmobileplanlist1()">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="new index.html">MobilePlan</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -75,34 +75,37 @@
     <div class="row" >
         <div class="col d-flex justify-content-center">
             <div class="col-md-7 p-4">
-                <div class="card shadow p-3 mb-5 bg-body rounded" >
-                    <div class="card-body" >
+                <div  >
+                    <div  >
                         <div class=" row"  >
-                        <div class="table-responsive" style="overflow-y: auto; overflow-x: auto; height:300px; width:100%;">
-                            <table class="table table-bordered" id="currTable">
-                                <thead class="bg-dark" style = " position:sticky; top:0;">
-                                    <tr>
-                                        <th scope="col" style=color:white;>ID</th>
-                                        <th scope="col" style=color:white;>Validity</th>
-                                        <th scope="col" style=color:white;>Name</th>
-                                        <th scope="col" style=color:white;>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            
-                        </div>
+                            <div id="myForm">
+								<form class="form-container">
+									<div class="col d-flex justify-content-text-center" mt-5>
+										<div class="card shadow p-5 mb-7 bg-body rounded" style = "height: 40em ; width:100%;">
+											<div class="card-body">
+                        						<div class=" row">
+													<div class="table-responsive" style="overflow-y: auto; overflow-x: auto; height: 35rem; width:650px;">
+														<table class="table table-bordered" id="mobileplans" style = "height: 35rem; ">
+															<thead class="bg-dark" style = " position:sticky; top:0;">
+																<tr style=text-align:center;>
+																	<th scope="col" style="color:white; width: 20px;" >ID</th>
+																	<th scope="col" style=color:white;>Name</th>
+																	<th scope="col" style=color:white;>Validity</th>
+																	<th scope="col" style="color:white; width: 3    00px;">Description
+																	</th>
+																</tr>
+															</thead>
+															<tbody>
+													 	</table>
+													</div>
+											   </div>	
+										  </div>	
+									 </div>
+								</form>
+							</div>
                         
                     </div>
-                    <div class="text-center">
-                        <button type="button" id = "view" class="btn btn-outline-success mt-4 btn-lg">
-                            View Plans</button>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -120,9 +123,9 @@
             var mobilePlanList = document.getElementById("mobileplans");
             for (var i = 0; i < mobilePlans.length; i++) {
                 mobilePlanList.innerHTML += '<tr>' + '<td class="text-align-center" style="padding:0 17px 0 17px;">' + mobilePlans[i].id +
-                    '</td>' + '<td class="text-align-center" style="padding:0 17px 0 17px;">' + mobilePlans[i].operationType + '</td>' +
-                    '<td class="text-align-center" style="padding:0 17px 0 17px;">' + mobilePlans[i].entityJson + '</td>' +
-                    '<td class="text-align-center" style="padding:0 17px 0 17px;">' + mobilePlans[i].modificationDate + '</tr>';
+                    '</td>' + '<td class="text-align-center" style="padding:0 17px 0 17px; text-align: center">' + mobilePlans[i].name + '</td>' +
+                    '<td class="text-align-center" style="padding:0 17px 0 17px; text-align: center">' + mobilePlans[i].validity + '</td>' +
+                    '<td class="text-align-center" style="padding:0 17px 0 17px; text-align: center">' + mobilePlans[i].description + '</tr>';
             }
         }
     </script>

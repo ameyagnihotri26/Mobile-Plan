@@ -138,7 +138,7 @@ const getUserByID = async () => {
       let helper = document.getElementById("table");
 
       console.log(res);
-      helper.innerHTML = '<table class="table"><thead class="thead-dark"><tr><th scope="col">ID</th><th scope="col">Name</th><th scope="col">Description</th><th scope="col">Validity</th></tr></thead><tbody><tr><th scope="row">' + res['id']+'</th><td>' + res['name']+'</td><td>' + res['validity']+'</td><td>' + res['description']+'</td> </tbody></table>'
+      helper.innerHTML = '<table class="table"><thead class="thead-dark"><tr><th scope="col">ID</th><th scope="col">Name</th><th scope="col">Validity</th><th scope="col">Descrtiption</th></tr></thead><tbody><tr><th scope="row">' + res['id']+'</th><td>' + res['name']+'</td><td>' + res['validity']+'</td><td>' + res['description']+'</td> </tbody></table>'
       
 
       validationRes.innerHTML =
