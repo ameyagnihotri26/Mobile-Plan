@@ -98,10 +98,6 @@ public class MobilePlanController {
         ResponseEntity<Iterable<MobilePlan>> mpResponse;
         
         Date date = new Date();
- 	   
-		HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new
-		Auditlog("GET","Plans Displayed.",date));
-		restTemplate.postForObject(URI, request, Auditlog.class);
 		 
         Iterable<MobilePlan> mobilePlanList = mpSrvc.readAll();
         
