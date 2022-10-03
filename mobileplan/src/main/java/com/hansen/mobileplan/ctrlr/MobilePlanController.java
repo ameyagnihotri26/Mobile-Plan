@@ -1,5 +1,7 @@
 package com.hansen.mobileplan.ctrlr;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -37,24 +39,28 @@ public class MobilePlanController {
 	@Autowired
 	MobilePlanDao mobilePlanDao;
 	
+	
+	
 //	create - This function is used to create/store a mobileplan.
 	@CrossOrigin
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Object> create(@RequestBody MobilePlan inputentity) {
 		ResponseEntity<Object> mpResponse;
 		
-		Date date = new Date();
+		TimeZone.setDefault(TimeZone.getTimeZone("IST"));
+		SimpleDateFormat f = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
+		
 
 		Object mobilePlan = mpSrvc.create(inputentity);
 		if (mobilePlan != null) {
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-			Auditlog("CREATE",inputentity.toString(),date));
+			Auditlog("CREATE",inputentity.toString(),f.format(new Date())));
     		restTemplate.postForObject(URI, request, Auditlog.class);
     		
     		mpResponse = new ResponseEntity<Object>(inputentity, null, HttpStatus.CREATED);
 		} else {
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-			Auditlog("CREATE","Given ID: " + inputentity.getId()+ " Already Exist.",date));
+			Auditlog("CREATE","Given ID: " + inputentity.getId()+ " Already Exist.",f.format(new Date())));
 			restTemplate.postForObject(URI, request, Auditlog.class);
 			
 			String response = "Cant save as ID is already exist";
@@ -70,22 +76,15 @@ public class MobilePlanController {
     public ResponseEntity<Object> read(@PathVariable(value = "id") Long id) {
         ResponseEntity<Object> mpResponse = null;
         
-        Date date = new Date();
         
         Object mobilePlanByID = mpSrvc.read(id);  
         if( mobilePlanByID != null) {
             mpResponse = new ResponseEntity<Object>(mobilePlanByID, null, HttpStatus.OK); 
             
-            HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-            Auditlog("GET-BY-ID","Plan ID: " + id + " Displayed.",date));
-    		restTemplate.postForObject(URI, request, Auditlog.class);
         }
         else {
             mpResponse = new ResponseEntity<Object>(ID_NOT_EXIST , null, HttpStatus.NOT_FOUND);  
             
-            HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-            Auditlog("GET-BY-ID","Given ID: " + id +" Does Not Exist.",date));
-    		restTemplate.postForObject(URI, request, Auditlog.class);
         }
         
 		return mpResponse;
@@ -97,7 +96,8 @@ public class MobilePlanController {
     public ResponseEntity<Iterable<MobilePlan>> readAll() {
         ResponseEntity<Iterable<MobilePlan>> mpResponse;
         
-        Date date = new Date();
+        TimeZone.setDefault(TimeZone.getTimeZone("IST"));
+    	SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd  'at' HH:mm:ss z");
 		 
         Iterable<MobilePlan> mobilePlanList = mpSrvc.readAll();
         
@@ -112,20 +112,21 @@ public class MobilePlanController {
     public ResponseEntity<Object> update(@RequestBody MobilePlan tobemerged) {
         ResponseEntity<Object> planResponse;
         
-        Date date = new Date();
+        TimeZone.setDefault(TimeZone.getTimeZone("IST"));
+    	SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd  'at' HH:mm:ss z");
  	   
         Object updatedMobilePlan = mpSrvc.update(tobemerged);
         if(updatedMobilePlan != null) {
         	planResponse = new ResponseEntity<Object>(URI, null, HttpStatus.OK);
         	
         	HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-        	Auditlog("UPDATE","Plan ID: " + tobemerged.getId() + " Updated.",date));
+        	Auditlog("UPDATE","Plan ID: " + tobemerged.getId() + " Updated.",f.format(new Date())));
     		restTemplate.postForObject(URI, request, Auditlog.class);
         }else {
 			planResponse =  new ResponseEntity<Object>(ID_NOT_EXIST, null, HttpStatus.BAD_REQUEST);
 			
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new
-			Auditlog("UPDATE","Given ID: " + tobemerged.getId()+ " Does Not Exist.",date));
+			Auditlog("UPDATE","Given ID: " + tobemerged.getId()+ " Does Not Exist.",f.format(new Date())));
 			restTemplate.postForObject(URI, request, Auditlog.class);
         }
         
@@ -138,20 +139,21 @@ public class MobilePlanController {
 	public ResponseEntity<Object> delete(@PathVariable(value = "planid") Long planid) {
 		ResponseEntity<Object> planResponse = null;
 		
-		Date date = new Date();
+		TimeZone.setDefault(TimeZone.getTimeZone("IST"));
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd  'at' HH:mm:ss z");
 
 		Object deletedMobilePlan = mpSrvc.delete(planid);
 		if(deletedMobilePlan != null) {
 			String response = "Data deleted successfully";
 			
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-			Auditlog("DELETE","Plan ID: " + planid + " Deleted.",date));
+			Auditlog("DELETE","Plan ID: " + planid + " Deleted.",f.format(new Date())));
 			restTemplate.postForObject(URI, request, Auditlog.class);
 			
 			planResponse =  new ResponseEntity<Object>(response, null, HttpStatus.OK);
 		}else {
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new
-			Auditlog("DELETE","Given ID: " + planid + " Does Not Exist.",date));
+			Auditlog("DELETE","Given ID: " + planid + " Does Not Exist.",f.format(new Date())));
 			restTemplate.postForObject(URI, request, Auditlog.class);
 			
 			planResponse =  new ResponseEntity<Object>(ID_NOT_EXIST, null, HttpStatus.NOT_FOUND);

@@ -8,17 +8,17 @@ public class Auditlog {
 	private Long id;
 	private String operationType;
 	private String entityJson;
-	private Date modificationDate;
+	private String modificationDate;
 	
 	public Auditlog() {
 		super();
 	}
 
-	public Auditlog(String operationType, String entityJson , Date date) {
+	public Auditlog(String operationType, String entityJson , String string) {
 		super();
 		this.operationType = operationType;
 		this.entityJson = entityJson;
-		this.modificationDate = date;
+		this.modificationDate = string;
 	}
 
 	public Long getId() {
@@ -45,11 +45,11 @@ public class Auditlog {
 		this.entityJson = entityJson;
 	}
 
-	public Date getModificationDate() {
+	public String getModificationDate() {
 		return modificationDate;
 	}
 
-	public void setModificationDate(Date modificationDate) {
+	public void setModificationDate(String modificationDate) {
 		this.modificationDate = modificationDate;
 	}
 
