@@ -30,6 +30,15 @@ public class MobilePlanSrvc {
 			return null;
 		}
 	}
+	
+	public MobilePlan read1(Long id) {
+		Optional<MobilePlan> currentMobilePlan = mobilePlanDao.findById(id);
+		if (currentMobilePlan.isPresent()) {
+			return currentMobilePlan.get();
+		}else {
+			return null;
+		}
+	}
 
 	public Iterable<MobilePlan> readAll() {
 		Iterable<MobilePlan> mobilePlanList = mobilePlanDao.findAll();

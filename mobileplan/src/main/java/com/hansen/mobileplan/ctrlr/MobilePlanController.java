@@ -115,18 +115,39 @@ public class MobilePlanController {
         TimeZone.setDefault(TimeZone.getTimeZone("IST"));
     	SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd  'at' HH:mm:ss z");
  	   
+    	MobilePlan curr_mp = mpSrvc.read1(tobemerged.getId());
+    	String newMessage = "", newValidity, newName, newDescription;
+    	
+    	if(curr_mp.getValidity() != tobemerged.getValidity() ) {
+    		newValidity = String.valueOf(tobemerged.getValidity());
+    		
+    		newMessage += " Validity : " + newValidity;
+    	}
+    	
+    	if(!(curr_mp.getName().equals(tobemerged.getName()))) {
+    		newName = tobemerged.getName();
+    		
+    		newMessage += " Name : " + newName;
+    	}
+    	
+    	if( !(curr_mp.getDescription().equals(tobemerged.getDescription()))) {
+    		newDescription = tobemerged.getDescription();
+    		
+    		newMessage += " Description : " + newDescription;
+    	}
+    	
         Object updatedMobilePlan = mpSrvc.update(tobemerged);
         if(updatedMobilePlan != null) {
         	planResponse = new ResponseEntity<Object>(URI, null, HttpStatus.OK);
         	
         	HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-        	Auditlog("UPDATE","Plan ID: " + tobemerged.getId() + " Updated.",f.format(new Date())));
+        	Auditlog("UPDATE",newMessage,f.format(new Date())));
     		restTemplate.postForObject(URI, request, Auditlog.class);
         }else {
 			planResponse =  new ResponseEntity<Object>(ID_NOT_EXIST, null, HttpStatus.BAD_REQUEST);
 			
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new
-			Auditlog("UPDATE","Given ID: " + tobemerged.getId()+ " Does Not Exist.",f.format(new Date())));
+			Auditlog("UPDATE",newMessage,f.format(new Date())));
 			restTemplate.postForObject(URI, request, Auditlog.class);
         }
         
