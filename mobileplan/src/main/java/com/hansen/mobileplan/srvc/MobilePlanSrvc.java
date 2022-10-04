@@ -16,20 +16,9 @@ public class MobilePlanSrvc {
 	
 //	create - this function creates a mobileplan and save it inside our database.
 	public Object create(MobilePlan entity) {
-		Long currentId = entity.getId();
-		if(currentId == null)
-		{
-			return null;
-		}else {
-			Optional<MobilePlan> mobilePlanToBeCreated  = mobilePlanDao.findById(entity.getId());
-			if(mobilePlanToBeCreated.isPresent()) {
-				return null ;
-			}else {
-				MobilePlan mobileplan = mobilePlanDao.save(entity);
-				
-				return mobileplan;
-			}
-		}
+		MobilePlan mobileplan = mobilePlanDao.save(entity);
+		
+		return mobileplan;
 	}
 
 //	read - this function reads a mobileplan by its ID from our database.
