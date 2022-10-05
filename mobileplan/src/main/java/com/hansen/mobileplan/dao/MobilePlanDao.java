@@ -12,5 +12,8 @@ public interface MobilePlanDao extends PagingAndSortingRepository<MobilePlan, Lo
 	
 	@Query(value = "SELECT * FROM mobile_plan Where description LIKE %?% ", nativeQuery = true)
 	Iterable<MobilePlan> findByDescription(String keyword);
+	
+	@Query(value = "SELECT * FROM mobile_plan Where validity LIKE %?% ", nativeQuery = true)
+	Iterable<MobilePlan> findByValidity(int keyword);
 
 }

@@ -114,6 +114,18 @@ public class MobilePlanController {
         
     }
 	
+	@CrossOrigin
+	@RequestMapping(value = "/validity/{validity}", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<MobilePlan>> read1(@PathVariable(value = "validity") int validity) {
+        
+        Iterable<MobilePlan> mobilePlanList = mobilePlanDao.findByValidity(validity);
+        
+        ResponseEntity<Iterable<MobilePlan>> mpResponse = new ResponseEntity<Iterable<MobilePlan>>(mobilePlanList, null, HttpStatus.OK);
+        
+        return mpResponse;
+        
+    }
+	
 //	readAll - This function is used to get the list of all mobileplan exists inside database.
 	@CrossOrigin
 	@RequestMapping(method = RequestMethod.GET)
