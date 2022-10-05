@@ -90,6 +90,30 @@ public class MobilePlanController {
 		return mpResponse;
     }
 	
+	@CrossOrigin
+	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<MobilePlan>> read(@PathVariable(value = "name") String name) {
+        
+        Iterable<MobilePlan> mobilePlanList = mpSrvc.findByName(name);
+        
+        ResponseEntity<Iterable<MobilePlan>> mpResponse = new ResponseEntity<Iterable<MobilePlan>>(mobilePlanList, null, HttpStatus.OK);
+        
+        return mpResponse;
+        
+    }
+	
+	@CrossOrigin
+	@RequestMapping(value = "/description/{description}", method = RequestMethod.GET)
+    public ResponseEntity<Iterable<MobilePlan>> read1(@PathVariable(value = "description") String description) {
+        
+        Iterable<MobilePlan> mobilePlanList = mobilePlanDao.findByDescription(description);
+        
+        ResponseEntity<Iterable<MobilePlan>> mpResponse = new ResponseEntity<Iterable<MobilePlan>>(mobilePlanList, null, HttpStatus.OK);
+        
+        return mpResponse;
+        
+    }
+	
 //	readAll - This function is used to get the list of all mobileplan exists inside database.
 	@CrossOrigin
 	@RequestMapping(method = RequestMethod.GET)

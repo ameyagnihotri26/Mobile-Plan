@@ -45,6 +45,14 @@ public class MobilePlanSrvc {
 		
 		return mobilePlanList;
 	}
+	
+	public Iterable<MobilePlan> findByName(String keyword) {
+
+		Iterable<MobilePlan> mobilePlanList = mobilePlanDao.findByName(keyword);
+
+		return mobilePlanList;
+
+	}
 
 //	update - this function updates an existent mobileplan in our database.
 	public Object update(MobilePlan tobemerged) {
