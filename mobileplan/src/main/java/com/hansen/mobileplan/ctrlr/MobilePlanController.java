@@ -48,13 +48,21 @@ public class MobilePlanController {
 		ResponseEntity<Object> mpResponse;
 		
 		TimeZone.setDefault(TimeZone.getTimeZone("IST"));
-		SimpleDateFormat f = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
+		SimpleDateFormat f = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
 		
 
 		Object mobilePlan = mpSrvc.create(inputentity);
+		
+		
 		if (mobilePlan != null) {
+			String output = "";
+			output += "ID : "  + inputentity.getId()+", ";
+			output += "Name : "  + inputentity.getName()+", ";
+			output += "Validity : "  + inputentity.getValidity()+", ";
+			output += "Description : "  + inputentity.getDescription()+".";
+					
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-			Auditlog("CREATE",inputentity.toString(),f.format(new Date())));
+			Auditlog("CREATE",output,f.format(new Date())));
     		restTemplate.postForObject(URI, request, Auditlog.class);
     		
     		mpResponse = new ResponseEntity<Object>(inputentity, null, HttpStatus.CREATED);
@@ -71,23 +79,36 @@ public class MobilePlanController {
 	}
 	
 //	read - This function is used to get a mobileplan by its ID.
+//	@CrossOrigin
+//	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+//    public ResponseEntity<Object> read(@PathVariable(value = "id") Long id) {
+//        ResponseEntity<Object> mpResponse = null;
+//        
+//        MobilePlan mp = new MobilePlan();
+//        
+//        Object mobilePlanByID = mpSrvc.read(id);  
+//        if( mobilePlanByID != null) {
+//            mpResponse = new ResponseEntity<Object>(mobilePlanByID, null, HttpStatus.OK); 
+//            
+//        }
+//        else {
+//            mpResponse = new ResponseEntity<Object>(mp , null, HttpStatus.NOT_FOUND);  
+//            
+//        }
+//        
+//		return mpResponse;
+//    }
+//	
 	@CrossOrigin
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public ResponseEntity<Object> read(@PathVariable(value = "id") Long id) {
-        ResponseEntity<Object> mpResponse = null;
+    public ResponseEntity<Object> reada(@PathVariable(value = "id") Long id) {
         
         
-        Object mobilePlanByID = mpSrvc.read(id);  
-        if( mobilePlanByID != null) {
-            mpResponse = new ResponseEntity<Object>(mobilePlanByID, null, HttpStatus.OK); 
-            
-        }
-        else {
-            mpResponse = new ResponseEntity<Object>(ID_NOT_EXIST , null, HttpStatus.NOT_FOUND);  
-            
-        }
+        Object mp = mobilePlanDao.findById(id);
         
-		return mpResponse;
+        ResponseEntity<Object> mpResponse1 = new ResponseEntity<Object>(mp, null, HttpStatus.OK);
+        
+        return mpResponse1;
     }
 	
 	@CrossOrigin
@@ -133,7 +154,7 @@ public class MobilePlanController {
         ResponseEntity<Iterable<MobilePlan>> mpResponse;
         
         TimeZone.setDefault(TimeZone.getTimeZone("IST"));
-    	SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd  'at' HH:mm:ss z");
+    	SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 		 
         Iterable<MobilePlan> mobilePlanList = mpSrvc.readAll();
         
@@ -148,11 +169,17 @@ public class MobilePlanController {
     public ResponseEntity<Object> update(@RequestBody MobilePlan tobemerged) {
         ResponseEntity<Object> planResponse;
         
+        
         TimeZone.setDefault(TimeZone.getTimeZone("IST"));
-    	SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd  'at' HH:mm:ss z");
+    	SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
  	   
     	MobilePlan curr_mp = mpSrvc.read1(tobemerged.getId());
-    	String newMessage = "", newValidity, newName, newDescription;
+    	String output = "Previous Fields [ ";
+		output += "ID : "  + curr_mp.getId()+", ";
+		output += "Name : "  + curr_mp.getName()+", ";
+		output += "Validity : "  + curr_mp.getValidity()+", ";
+		output += "Description : "  + curr_mp.getDescription()+" .] --> ";
+    	String newMessage = "Updated Fields [ ", newValidity, newName, newDescription;
     	
     	if(curr_mp.getValidity() != tobemerged.getValidity() ) {
     		newValidity = String.valueOf(tobemerged.getValidity());
@@ -171,13 +198,14 @@ public class MobilePlanController {
     		
     		newMessage += " Description : " + newDescription;
     	}
-    	
+    	newMessage += " ]";
+    	output += newMessage;
         Object updatedMobilePlan = mpSrvc.update(tobemerged);
         if(updatedMobilePlan != null) {
         	planResponse = new ResponseEntity<Object>(URI, null, HttpStatus.OK);
         	
         	HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-        	Auditlog("UPDATE",newMessage,f.format(new Date())));
+        	Auditlog("UPDATE",output,f.format(new Date())));
     		restTemplate.postForObject(URI, request, Auditlog.class);
         }else {
 			planResponse =  new ResponseEntity<Object>(ID_NOT_EXIST, null, HttpStatus.BAD_REQUEST);
@@ -197,7 +225,7 @@ public class MobilePlanController {
 		ResponseEntity<Object> planResponse = null;
 		
 		TimeZone.setDefault(TimeZone.getTimeZone("IST"));
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd  'at' HH:mm:ss z");
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
 		Object deletedMobilePlan = mpSrvc.delete(planid);
 		if(deletedMobilePlan != null) {
