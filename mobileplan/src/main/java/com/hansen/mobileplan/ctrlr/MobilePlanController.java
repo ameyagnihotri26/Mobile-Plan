@@ -101,14 +101,24 @@ public class MobilePlanController {
 //	
 	@CrossOrigin
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public ResponseEntity<Object> reada(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Object[]> reada(@PathVariable(value = "id") Long id) {
         
         
-        Object mp = mobilePlanDao.findById(id);
-        
-        ResponseEntity<Object> mpResponse1 = new ResponseEntity<Object>(mp, null, HttpStatus.OK);
-        
-        return mpResponse1;
+        Object mp1 = mobilePlanDao.findById(id);
+        if(mp1 == null)
+        {
+        	Object []mp2 = {};
+        	
+        	ResponseEntity<Object[]> mpResponse1 = new ResponseEntity<Object[]>(mp2, null, HttpStatus.OK);
+        	
+        	return mpResponse1;
+        }else {
+        	Object []mp2 = {mp1};
+        	
+        	ResponseEntity<Object[]> mpResponse1 = new ResponseEntity<Object[]>(mp2, null, HttpStatus.OK);
+        	
+        	return mpResponse1;
+        }        
     }
 	
 	@CrossOrigin
