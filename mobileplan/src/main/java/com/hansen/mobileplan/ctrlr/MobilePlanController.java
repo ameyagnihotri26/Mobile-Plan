@@ -48,7 +48,7 @@ public class MobilePlanController {
 		ResponseEntity<Object> mpResponse;
 		
 		TimeZone.setDefault(TimeZone.getTimeZone("IST"));
-		SimpleDateFormat f = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
+		SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		
 
 		Object mobilePlan = mpSrvc.create(inputentity);
@@ -56,10 +56,10 @@ public class MobilePlanController {
 		
 		if (mobilePlan != null) {
 			String output = "";
-			output += "ID : "  + inputentity.getId()+", ";
-			output += "Name : "  + inputentity.getName()+", ";
-			output += "Validity : "  + inputentity.getValidity()+", ";
-			output += "Description : "  + inputentity.getDescription()+".";
+			output += "Plan ID: "  + inputentity.getId()+" CREATED";
+			output += "<br>";
+			output += "Body: " + "[Name:" + inputentity.getName() + ", " + "Description:" + inputentity.getDescription() +
+					", " + "Validity:" + inputentity.getValidity() +"]";
 					
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
 			Auditlog("CREATE",output,f.format(new Date())));
@@ -164,7 +164,7 @@ public class MobilePlanController {
         ResponseEntity<Iterable<MobilePlan>> mpResponse;
         
         TimeZone.setDefault(TimeZone.getTimeZone("IST"));
-    	SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+    	SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		 
         Iterable<MobilePlan> mobilePlanList = mpSrvc.readAll();
         
@@ -181,34 +181,36 @@ public class MobilePlanController {
         
         
         TimeZone.setDefault(TimeZone.getTimeZone("IST"));
-    	SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+    	SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
  	   
     	MobilePlan curr_mp = mpSrvc.read1(tobemerged.getId());
-    	String output = "Previous Fields [ ";
-		output += "ID : "  + curr_mp.getId()+", ";
-		output += "Name : "  + curr_mp.getName()+", ";
-		output += "Validity : "  + curr_mp.getValidity()+", ";
-		output += "Description : "  + curr_mp.getDescription()+" .] --> ";
-    	String newMessage = "Updated Fields [ ", newValidity, newName, newDescription;
     	
-    	if(curr_mp.getValidity() != tobemerged.getValidity() ) {
-    		newValidity = String.valueOf(tobemerged.getValidity());
-    		
-    		newMessage += " Validity : " + newValidity;
-    	}
+    	String output = "Plan ID: " + curr_mp.getId() + " UPDATED";
+    	output += "<br>";
+    	output += "Previous Fields: "  + "[";
+		output += "Name:"  + curr_mp.getName()+", ";
+		output += "Validity:"  + curr_mp.getValidity()+", ";
+		output += "Description:"  + curr_mp.getDescription()+ "]" +"<br>";
+    	String newMessage = "Updated Fields: [", newValidity, newName, newDescription;
     	
     	if(!(curr_mp.getName().equals(tobemerged.getName()))) {
     		newName = tobemerged.getName();
     		
-    		newMessage += " Name : " + newName;
+    		newMessage += "Name:" + newName + ", ";
     	}
     	
+    	if(curr_mp.getValidity() != tobemerged.getValidity() ) {
+    		newValidity = String.valueOf(tobemerged.getValidity());
+    		
+    		newMessage += "Validity : " + newValidity + ", " ;
+    	}
+
     	if( !(curr_mp.getDescription().equals(tobemerged.getDescription()))) {
     		newDescription = tobemerged.getDescription();
     		
-    		newMessage += " Description : " + newDescription;
+    		newMessage += "Description:" + newDescription;
     	}
-    	newMessage += " ]";
+    	newMessage += "]";
     	output += newMessage;
         Object updatedMobilePlan = mpSrvc.update(tobemerged);
         if(updatedMobilePlan != null) {
@@ -235,14 +237,14 @@ public class MobilePlanController {
 		ResponseEntity<Object> planResponse = null;
 		
 		TimeZone.setDefault(TimeZone.getTimeZone("IST"));
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+		SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
 		Object deletedMobilePlan = mpSrvc.delete(planid);
 		if(deletedMobilePlan != null) {
 			String response = "Data deleted successfully";
 			
 			HttpEntity<Auditlog> request = new HttpEntity<Auditlog>(new 
-			Auditlog("DELETE","Plan ID: " + planid + " Deleted.",f.format(new Date())));
+			Auditlog("DELETE","Plan ID: " + planid + " DELETED",f.format(new Date())));
 			restTemplate.postForObject(URI, request, Auditlog.class);
 			
 			planResponse =  new ResponseEntity<Object>(response, null, HttpStatus.OK);
